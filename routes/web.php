@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
-Route::resource('student', StudentController::class);
+Route::resource('students', StudentController::class);
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

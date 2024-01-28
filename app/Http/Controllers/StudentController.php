@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Student;
+use App\Models\Students;
 
 class StudentController extends Controller
 {
@@ -12,7 +12,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = Students::all();
         return view('index', compact('students'));
     }
 
@@ -29,7 +29,23 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'name'=>'required|max:255',
+            'email'=>'required|max:255',
+            'phone'=>'required|max:255',
+            'section'=>'required',
+            'image'=>'required|image| mimes:jpg,jpeg,png,gif,svg',
+        ]);
+        $image = $request->file('image');
+        $destinationPath = 'image/';
+        $profileImage = date('Ymdhis').".".$image->getClientOriginalExtension();
+        $image->move($destinationPath,$profileImage);
+        $validateData['image'] = $profileImage;
+        $students = Students::create($validateData);
+
+
+        return redirect('/students');
+
     }
 
     /**
